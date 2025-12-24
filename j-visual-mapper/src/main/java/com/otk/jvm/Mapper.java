@@ -1,59 +1,69 @@
 package com.otk.jvm;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 import javax.swing.SwingUtilities;
 
 import com.otk.jesb.Session;
-import com.otk.jesb.instantiation.RootInstanceBuilderFacade;
+import com.otk.jesb.instantiation.RootInstanceBuilder;
 import com.otk.jesb.solution.Plan;
 import com.otk.jesb.solution.Solution;
+import com.otk.jesb.util.MiscUtils;
 
 import xy.reflect.ui.control.swing.renderer.Form;
 import xy.reflect.ui.control.swing.util.SwingRendererUtils;
 import xy.reflect.ui.info.type.source.JavaTypeInfoSource;
 
-public class Mapper<S, T> extends Plan {
+public class Mapper extends Plan {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				GUI_INSTANCE.openObjectFrame(new Mapper<Object, Object>(Object.class, Object.class));
+				GUI_INSTANCE.openObjectFrame(new Mapper(Rectangle.class, Polygon.class));
 			}
 		});
 	}
 
 	public static MapperGUI GUI_INSTANCE = new MapperGUI();
 
-	private Class<? extends S> sourceClass;
-	private Class<? extends T> targetClass;
-
-	public Mapper(Class<? extends S> sourceClass, Class<? extends T> targetClass) {
-		this.sourceClass = sourceClass;
-		this.targetClass = targetClass;
-		setInputVariableName("INPUT");
-		getOutputBuilder().setRootInstanceName("Mappings");
-		configure(sourceClass, targetClass);
+	public Mapper(Class<?> sourceClass, Class<?> targetClass) {
+		setInputVariableName("SOURCE");
+		getOutputBuilder().setRootInstanceName("TARGET");
+		setActivator(new MappingsActivator(sourceClass, targetClass));
+		getOutputBuilder().getFacade(getSolutionInstance()).getChildren().get(0).setConcrete(true);
 	}
 
-	private void configure(Class<?> actualSsourceClass, Class<?> actualTargetClass) {
-		setActivator(new MappingsActivator(actualSsourceClass.asSubclass(sourceClass),
-				actualTargetClass.asSubclass(targetClass)));
-		RootInstanceBuilderFacade outputBuilderFacade = getOutputBuilder().getFacade(getSolutionInstance());
-		if (outputBuilderFacade.getChildren().size() > 0) {
-			outputBuilderFacade.getChildren().get(0).setConcrete(false);
-			outputBuilderFacade.getChildren().get(0).setConcrete(true);
+	public static Mapper get(Class<?> sourceClass, Class<?> targetClass, Class<?> resourceClass,
+			String resourceLocation) throws IOException {
+		URL resourceURL = resourceClass.getResource(resourceLocation);
+		Mapper result = new Mapper(sourceClass, targetClass);
+		if (resourceURL != null) {
+			try (InputStream input = resourceURL.openStream()) {
+				result.setOutputBuilder((RootInstanceBuilder) MiscUtils.deserialize(input,
+						getSolutionInstance().getRuntime().getXstream()));
+			}
+		} else {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					String resourceName = new File(resourceLocation).getName();
+					GUI_INSTANCE.openMappingsEditor(result, resourceName,
+							"J-Visual Mapper - " + resourceClass.getName() + "/" + resourceLocation );
+				}
+			});
 		}
+		return result;
 	}
 
-	private void configure(String sourceClassName, String targetClassName) {
-		configure(loadClass(sourceClassName), loadClass(targetClassName));
-	}
-
-	private Class<?> loadClass(String className) {
-		return getSolutionInstance().getRuntime().getJESBClass(className);
-	}
-
-	private Solution getSolutionInstance() {
+	private static Solution getSolutionInstance() {
 		return GUI_INSTANCE.getSolutionInstance();
 	}
 
@@ -70,17 +80,22 @@ public class Mapper<S, T> extends Plan {
 		return getActivator().getOutputClass(getSolutionInstance()).getName();
 	}
 
-	public void changeSourceClassName(String sourceClassName) {
-		configure(sourceClassName, getTargetClassName());
+	public void saveMappings(File file) throws IOException {
+		try (FileOutputStream output = new FileOutputStream(file)) {
+			MiscUtils.serialize(getOutputBuilder(), output, getSolutionInstance().getRuntime().getXstream());
+		}
 	}
 
-	public void changeTargetClassName(String targetClassName) {
-		configure(getSourceClassName(), targetClassName);
+	public void loadMappings(File file) throws IOException {
+		try (FileInputStream input = new FileInputStream(file)) {
+			setOutputBuilder((RootInstanceBuilder) MiscUtils.deserialize(input,
+					getSolutionInstance().getRuntime().getXstream()));
+		}
 	}
 
-	public T map(S source) throws ExecutionError {
-		return targetClass.cast(execute(source, Plan.ExecutionInspector.DEFAULT,
-				new Plan.ExecutionContext(Session.openDummySession(getSolutionInstance()), this)));
+	public Object map(Object source) throws ExecutionError {
+		return execute(source, Plan.ExecutionInspector.DEFAULT,
+				new Plan.ExecutionContext(Session.openDummySession(getSolutionInstance()), this));
 	}
 
 	public void test() {
@@ -96,9 +111,9 @@ public class Mapper<S, T> extends Plan {
 				if (source == null) {
 					return;
 				}
-				T target;
+				Object target;
 				try {
-					target = targetClass.cast(map(sourceClass.cast(source)));
+					target = map(source);
 				} catch (ExecutionError e) {
 					GUI_INSTANCE.handleException(mapperForm, e);
 					return;

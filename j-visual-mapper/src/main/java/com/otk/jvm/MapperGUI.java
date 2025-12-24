@@ -1,9 +1,16 @@
 package com.otk.jvm;
 
+import java.io.File;
+
 import com.otk.jesb.solution.Solution;
 import com.otk.jesb.ui.GUI;
 
 import xy.reflect.ui.control.RenderingContext;
+import xy.reflect.ui.control.swing.builder.StandardEditorBuilder;
+import xy.reflect.ui.control.swing.builder.AbstractEditorBuilder.EditorFrame;
+import xy.reflect.ui.control.swing.menu.AbstractFileMenuItem;
+import xy.reflect.ui.control.swing.renderer.Form;
+import xy.reflect.ui.control.swing.util.SwingRendererUtils;
 import xy.reflect.ui.info.type.ITypeInfo;
 
 public class MapperGUI extends GUI {
@@ -65,6 +72,15 @@ public class MapperGUI extends GUI {
 			return null;
 		}
 		return super.getMainCustomizedClass(customizationsIdentifier);
+	}
+
+	public void openMappingsEditor(Mapper result, String filePath, String title) {
+		StandardEditorBuilder editorBuilder = createEditorBuilder(null, result, title, null, true);
+		EditorFrame frame = editorBuilder.createFrame();
+		Form mapperForm = SwingRendererUtils.findFirstObjectDescendantForm(result, frame, this);
+		AbstractFileMenuItem.getLastFileByForm().put(mapperForm, new File(filePath));
+		SwingRendererUtils.updateAncestorWindowMenu(mapperForm, this);
+		showFrame(frame);
 	}
 
 }

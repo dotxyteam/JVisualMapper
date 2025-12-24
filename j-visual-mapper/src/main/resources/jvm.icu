@@ -594,8 +594,61 @@
             <valueValidityDetectionForced>false</valueValidityDetectionForced>
         </fieldsCustomization>
         <immutableForced>false</immutableForced>
+        <loadingMethodName>loadMappings</loadingMethodName>
         <menuModel>
             <uniqueIdentifier>-66a3570a:19b4d6d65db:-7152</uniqueIdentifier>
+            <menu>
+                <uniqueIdentifier>2fa32f70:19b51f8cfb9:-54da</uniqueIdentifier>
+                <name>File</name>
+                <itemCategory>
+                    <uniqueIdentifier>2fa32f70:19b51f8cfb9:-5485</uniqueIdentifier>
+                    <renewMenuItem>
+                        <uniqueIdentifier>2fa32f70:19b51f8cfb9:-540a</uniqueIdentifier>
+                        <name>New</name>
+                    </renewMenuItem>
+                    <openMenuItem>
+                        <uniqueIdentifier>2fa32f70:19b51f8cfb9:-53fa</uniqueIdentifier>
+                        <name>Open...</name>
+                        <fileBrowserConfiguration>
+                            <actionTitle>Open</actionTitle>
+                            <selectionMode>FILES_AND_DIRECTORIES</selectionMode>
+                        </fileBrowserConfiguration>
+                    </openMenuItem>
+                    <saveMenuItem>
+                        <uniqueIdentifier>2fa32f70:19b51f8cfb9:-53e8</uniqueIdentifier>
+                        <name>Save</name>
+                        <keyboardShortcut>
+                            <keyName>S</keyName>
+                            <altDown>false</altDown>
+                            <altGrDown>false</altGrDown>
+                            <ctrlDown>true</ctrlDown>
+                            <metaDown>false</metaDown>
+                            <shiftDown>false</shiftDown>
+                        </keyboardShortcut>
+                        <fileBrowserConfiguration>
+                            <actionTitle>Save</actionTitle>
+                            <selectionMode>FILES_AND_DIRECTORIES</selectionMode>
+                        </fileBrowserConfiguration>
+                    </saveMenuItem>
+                    <saveAsMenuItem>
+                        <uniqueIdentifier>2fa32f70:19b51f8cfb9:-51dc</uniqueIdentifier>
+                        <name>Save As...</name>
+                        <fileBrowserConfiguration>
+                            <actionTitle>Save</actionTitle>
+                            <selectionMode>DIRECTORIES_ONLY</selectionMode>
+                        </fileBrowserConfiguration>
+                    </saveAsMenuItem>
+                    <name>persistence</name>
+                </itemCategory>
+                <itemCategory>
+                    <uniqueIdentifier>2fa32f70:19b51f8cfb9:-51cf</uniqueIdentifier>
+                    <exitMenuItem>
+                        <uniqueIdentifier>2fa32f70:19b51f8cfb9:-51c0</uniqueIdentifier>
+                        <name>Exit</name>
+                    </exitMenuItem>
+                    <name>lifeCycle</name>
+                </itemCategory>
+            </menu>
         </menuModel>
         <methodsCustomization>
             <uniqueIdentifier>-66a3570a:19b4d6d65db:-6ff1</uniqueIdentifier>
@@ -993,8 +1046,8 @@
             <encapsulationFieldName>sourceClassGroup</encapsulationFieldName>
             <ignoredReturnValueForced>false</ignoredReturnValueForced>
             <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
-            <methodName>changeSourceClassName</methodName>
-            <methodSignature>void changeSourceClassName(java.lang.String)</methodSignature>
+            <methodName>setSourceClassName</methodName>
+            <methodSignature>void setSourceClassName(java.lang.String)</methodSignature>
             <parametersCustomization>
                 <uniqueIdentifier>622875a6:19b4d98964e:2148</uniqueIdentifier>
                 <specificProperties/>
@@ -1023,8 +1076,8 @@
             <encapsulationFieldName>targetClassGroup</encapsulationFieldName>
             <ignoredReturnValueForced>false</ignoredReturnValueForced>
             <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
-            <methodName>changeTargetClassName</methodName>
-            <methodSignature>void changeTargetClassName(java.lang.String)</methodSignature>
+            <methodName>setTargetClassName</methodName>
+            <methodSignature>void setTargetClassName(java.lang.String)</methodSignature>
             <parametersCustomization>
                 <uniqueIdentifier>622875a6:19b4d98964e:214a</uniqueIdentifier>
                 <specificProperties/>
@@ -1044,7 +1097,242 @@
             <runWhenObjectShown>false</runWhenObjectShown>
             <validating>false</validating>
         </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>2fa32f70:19b51f8b119:-4d63</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>load</methodName>
+            <methodSignature>void load(java.io.File)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>2fa32f70:19b51f8b119:-4d5a</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>2fa32f70:19b51f8b119:-4d59</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>file</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>2fa32f70:19b51f8b119:-4d62</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>save</methodName>
+            <methodSignature>void save(java.io.File)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>2fa32f70:19b51f8b119:-4d58</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>2fa32f70:19b51f8b119:-4d57</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>file</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>2fa32f70:19b51f8b119:-4d61</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>get</methodName>
+            <methodSignature>com.otk.jvm.Mapper get(java.lang.Class, java.lang.Class, java.net.URL)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>2fa32f70:19b51f8b119:-4d56</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>2fa32f70:19b51f8b119:-4d55</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>sourceClass</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <parametersCustomization>
+                <uniqueIdentifier>2fa32f70:19b51f8b119:-4d54</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>2fa32f70:19b51f8b119:-4d53</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>targetClass</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <parametersCustomization>
+                <uniqueIdentifier>2fa32f70:19b51f8b119:-4d52</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>2fa32f70:19b51f8b119:-4d51</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>resourceURL</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>-532ecf31:19b522597d2:-4d2f</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>loadMappings</methodName>
+            <methodSignature>void loadMappings(java.io.File)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>-532ecf31:19b522597d2:-4d27</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>-532ecf31:19b522597d2:-4d26</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>file</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>-532ecf31:19b522597d2:-4d2e</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>saveMappings</methodName>
+            <methodSignature>void saveMappings(java.io.File)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>-532ecf31:19b522597d2:-4d25</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>-532ecf31:19b522597d2:-4d24</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>file</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>43a92071:19b529195fe:-4d1f</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>get</methodName>
+            <methodSignature>com.otk.jvm.Mapper get(java.lang.Class, java.lang.Class, java.lang.Class, java.lang.String)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>43a92071:19b529195fe:-4d18</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>43a92071:19b529195fe:-4d17</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>sourceClass</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <parametersCustomization>
+                <uniqueIdentifier>43a92071:19b529195fe:-4d16</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>43a92071:19b529195fe:-4d15</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>targetClass</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <parametersCustomization>
+                <uniqueIdentifier>43a92071:19b529195fe:-4d14</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>43a92071:19b529195fe:-4d13</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>resourceClass</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <parametersCustomization>
+                <uniqueIdentifier>43a92071:19b529195fe:-4d12</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>43a92071:19b529195fe:-4d11</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>resourceLocation</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
         <polymorphicInstanceAbstractTypeOptionAllowed>false</polymorphicInstanceAbstractTypeOptionAllowed>
+        <savingMethodName>saveMappings</savingMethodName>
         <typeName>com.otk.jvm.Mapper</typeName>
         <undoManagementHidden>false</undoManagementHidden>
         <validationRequirementForced>false</validationRequirementForced>
@@ -1159,8 +1447,8 @@
             <encapsulationFieldName>changeBox</encapsulationFieldName>
             <ignoredReturnValueForced>false</ignoredReturnValueForced>
             <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
-            <methodName>changeSourceClassName</methodName>
-            <methodSignature>void changeSourceClassName(java.lang.String)</methodSignature>
+            <methodName>setSourceClassName</methodName>
+            <methodSignature>void setSourceClassName(java.lang.String)</methodSignature>
             <parametersCustomization>
                 <uniqueIdentifier>622875a6:19b4d98c056:1fd1</uniqueIdentifier>
                 <specificProperties/>
@@ -1205,8 +1493,8 @@
             <duplicateGenerated>false</duplicateGenerated>
             <ignoredReturnValueForced>false</ignoredReturnValueForced>
             <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
-            <methodName>changeSourceClassName</methodName>
-            <methodSignature>void changeSourceClassName(java.lang.String)</methodSignature>
+            <methodName>setSourceClassName</methodName>
+            <methodSignature>void setSourceClassName(java.lang.String)</methodSignature>
             <parametersCustomization>
                 <uniqueIdentifier>622875a6:19b4d98c056:2002</uniqueIdentifier>
                 <specificProperties/>
@@ -1385,8 +1673,8 @@
             <encapsulationFieldName>changeBox</encapsulationFieldName>
             <ignoredReturnValueForced>false</ignoredReturnValueForced>
             <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
-            <methodName>changeTargetClassName</methodName>
-            <methodSignature>void changeTargetClassName(java.lang.String)</methodSignature>
+            <methodName>setTargetClassName</methodName>
+            <methodSignature>void setTargetClassName(java.lang.String)</methodSignature>
             <parametersCustomization>
                 <uniqueIdentifier>622875a6:19b4d98c056:3518</uniqueIdentifier>
                 <specificProperties/>
@@ -1475,8 +1763,8 @@
             <duplicateGenerated>false</duplicateGenerated>
             <ignoredReturnValueForced>false</ignoredReturnValueForced>
             <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
-            <methodName>changeTargetClassName</methodName>
-            <methodSignature>void changeTargetClassName(java.lang.String)</methodSignature>
+            <methodName>setTargetClassName</methodName>
+            <methodSignature>void setTargetClassName(java.lang.String)</methodSignature>
             <parametersCustomization>
                 <uniqueIdentifier>622875a6:19b4d98c056:3787</uniqueIdentifier>
                 <specificProperties/>
@@ -1568,6 +1856,11 @@
         </fieldsCustomization>
         <fieldsLayout>HORIZONTAL_FLOW</fieldsLayout>
         <formSpacing>0</formSpacing>
+        <formWidth>
+            <uniqueIdentifier>43a92071:19b5291b368:-5345</uniqueIdentifier>
+            <unit>PIXELS</unit>
+            <value>700</value>
+        </formWidth>
         <immutableForced>false</immutableForced>
         <menuModel>
             <uniqueIdentifier>622875a6:19b4d98c056:52e8</uniqueIdentifier>
