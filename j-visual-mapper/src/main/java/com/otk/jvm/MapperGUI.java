@@ -16,7 +16,7 @@ public class MapperGUI extends GUI {
 	public MapperGUI() {
 		getReflectionUI().setRenderingContextThreadLocal(ThreadLocal.withInitial(() -> new RenderingContext(null) {
 			@Override
-			protected Object findCurrentObjectLocally(ITypeInfo type) {
+			protected Object findObjectLocally(ITypeInfo type) {
 				if (type.getName().equals(Solution.class.getName())) {
 					return MapperGUI.this.getSolutionInstance();
 				}

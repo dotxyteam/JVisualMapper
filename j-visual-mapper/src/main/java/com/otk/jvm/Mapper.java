@@ -3,9 +3,12 @@ package com.otk.jvm;
 import javax.swing.SwingUtilities;
 
 import com.otk.jesb.Session;
+import com.otk.jesb.instantiation.RootInstanceBuilderFacade;
 import com.otk.jesb.solution.Plan;
 import com.otk.jesb.solution.Solution;
 
+import xy.reflect.ui.control.swing.renderer.Form;
+import xy.reflect.ui.control.swing.util.SwingRendererUtils;
 import xy.reflect.ui.info.type.source.JavaTypeInfoSource;
 
 public class Mapper<S, T> extends Plan {
@@ -27,14 +30,19 @@ public class Mapper<S, T> extends Plan {
 	public Mapper(Class<? extends S> sourceClass, Class<? extends T> targetClass) {
 		this.sourceClass = sourceClass;
 		this.targetClass = targetClass;
-		configure(sourceClass, targetClass);
+		setInputVariableName("INPUT");
 		getOutputBuilder().setRootInstanceName("Mappings");
+		configure(sourceClass, targetClass);
 	}
 
 	private void configure(Class<?> actualSsourceClass, Class<?> actualTargetClass) {
 		setActivator(new MappingsActivator(actualSsourceClass.asSubclass(sourceClass),
 				actualTargetClass.asSubclass(targetClass)));
-		getOutputBuilder().getFacade(getSolutionInstance()).getChildren().get(0).setConcrete(false);
+		RootInstanceBuilderFacade outputBuilderFacade = getOutputBuilder().getFacade(getSolutionInstance());
+		if (outputBuilderFacade.getChildren().size() > 0) {
+			outputBuilderFacade.getChildren().get(0).setConcrete(false);
+			outputBuilderFacade.getChildren().get(0).setConcrete(true);
+		}
 	}
 
 	private void configure(String sourceClassName, String targetClassName) {
@@ -76,10 +84,13 @@ public class Mapper<S, T> extends Plan {
 	}
 
 	public void test() {
+		final Form mapperForm = SwingRendererUtils.findContextualFormOfType(
+				GUI_INSTANCE.getReflectionUI().getTypeInfo(new JavaTypeInfoSource(Mapper.class, null)),
+				GUI_INSTANCE.getReflectionUI().getRenderingContextThreadLocal().get());
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Object source = GUI_INSTANCE.onTypeInstantiationRequest(null,
+				Object source = GUI_INSTANCE.onTypeInstantiationRequest(mapperForm,
 						GUI_INSTANCE.getReflectionUI().getTypeInfo(
 								new JavaTypeInfoSource(getActivator().getInputClass(getSolutionInstance()), null)));
 				if (source == null) {
@@ -89,14 +100,14 @@ public class Mapper<S, T> extends Plan {
 				try {
 					target = targetClass.cast(map(sourceClass.cast(source)));
 				} catch (ExecutionError e) {
-					GUI_INSTANCE.handleException(null, e);
+					GUI_INSTANCE.handleException(mapperForm, e);
 					return;
 				}
 				if (target == null) {
-					GUI_INSTANCE.handleException(null, new NullPointerException());
+					GUI_INSTANCE.handleException(mapperForm, new NullPointerException());
 					return;
 				}
-				GUI_INSTANCE.openObjectDialog(null, target);
+				GUI_INSTANCE.openObjectDialog(mapperForm, target);
 			}
 		});
 	}
