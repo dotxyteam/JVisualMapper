@@ -611,7 +611,7 @@
                         <name>Open...</name>
                         <fileBrowserConfiguration>
                             <actionTitle>Open</actionTitle>
-                            <selectionMode>FILES_AND_DIRECTORIES</selectionMode>
+                            <selectionMode>FILES_ONLY</selectionMode>
                         </fileBrowserConfiguration>
                     </openMenuItem>
                     <saveMenuItem>
@@ -627,7 +627,7 @@
                         </keyboardShortcut>
                         <fileBrowserConfiguration>
                             <actionTitle>Save</actionTitle>
-                            <selectionMode>FILES_AND_DIRECTORIES</selectionMode>
+                            <selectionMode>FILES_ONLY</selectionMode>
                         </fileBrowserConfiguration>
                     </saveMenuItem>
                     <saveAsMenuItem>
@@ -635,7 +635,7 @@
                         <name>Save As...</name>
                         <fileBrowserConfiguration>
                             <actionTitle>Save</actionTitle>
-                            <selectionMode>DIRECTORIES_ONLY</selectionMode>
+                            <selectionMode>FILES_ONLY</selectionMode>
                         </fileBrowserConfiguration>
                     </saveAsMenuItem>
                     <name>persistence</name>

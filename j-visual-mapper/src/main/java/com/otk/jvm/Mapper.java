@@ -27,12 +27,10 @@ public class Mapper extends Plan {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				GUI_INSTANCE.openObjectFrame(new Mapper(Rectangle.class, Polygon.class));
+				UI.INSTANCE.openObjectFrame(new Mapper(Rectangle.class, Polygon.class));
 			}
 		});
 	}
-
-	public static MapperGUI GUI_INSTANCE = new MapperGUI();
 
 	public Mapper(Class<?> sourceClass, Class<?> targetClass) {
 		setInputVariableName("SOURCE");
@@ -55,8 +53,8 @@ public class Mapper extends Plan {
 				@Override
 				public void run() {
 					String resourceName = new File(resourceLocation).getName();
-					GUI_INSTANCE.openMappingsEditor(result, resourceName,
-							"J-Visual Mapper - " + resourceClass.getName() + "/" + resourceLocation );
+					UI.INSTANCE.openMappingsEditor(result, resourceName,
+							"J-Visual Mapper - " + resourceClass.getName() + "/" + resourceLocation);
 				}
 			});
 		}
@@ -64,7 +62,7 @@ public class Mapper extends Plan {
 	}
 
 	private static Solution getSolutionInstance() {
-		return GUI_INSTANCE.getSolutionInstance();
+		return UI.INSTANCE.getSolutionInstance();
 	}
 
 	@Override
@@ -100,13 +98,13 @@ public class Mapper extends Plan {
 
 	public void test() {
 		final Form mapperForm = SwingRendererUtils.findContextualFormOfType(
-				GUI_INSTANCE.getReflectionUI().getTypeInfo(new JavaTypeInfoSource(Mapper.class, null)),
-				GUI_INSTANCE.getReflectionUI().getRenderingContextThreadLocal().get());
+				UI.INSTANCE.getReflectionUI().getTypeInfo(new JavaTypeInfoSource(Mapper.class, null)),
+				UI.INSTANCE.getReflectionUI().getRenderingContextThreadLocal().get());
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Object source = GUI_INSTANCE.onTypeInstantiationRequest(mapperForm,
-						GUI_INSTANCE.getReflectionUI().getTypeInfo(
+				Object source = UI.INSTANCE.onTypeInstantiationRequest(mapperForm,
+						UI.INSTANCE.getReflectionUI().getTypeInfo(
 								new JavaTypeInfoSource(getActivator().getInputClass(getSolutionInstance()), null)));
 				if (source == null) {
 					return;
@@ -115,16 +113,25 @@ public class Mapper extends Plan {
 				try {
 					target = map(source);
 				} catch (ExecutionError e) {
-					GUI_INSTANCE.handleException(mapperForm, e);
+					UI.INSTANCE.handleException(mapperForm, e);
 					return;
 				}
 				if (target == null) {
-					GUI_INSTANCE.handleException(mapperForm, new NullPointerException());
+					UI.INSTANCE.handleException(mapperForm, new NullPointerException());
 					return;
 				}
-				GUI_INSTANCE.openObjectDialog(mapperForm, target);
+				UI.INSTANCE.openObjectDialog(mapperForm, target);
 			}
 		});
+	}
+
+	public static class UI extends MapperGUI {
+
+		public static UI INSTANCE = new UI();
+
+		private UI() {
+		}
+
 	}
 
 }
