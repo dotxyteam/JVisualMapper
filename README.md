@@ -1,5 +1,5 @@
 # J-Visual Mapper
-A Java graphical mapping (between POJOs, JavaBeans, etc.) tool that can serve as an alternative to MapStruct (https://mapstruct.org/).
+A Java graphical mapping (between POJOs, JavaBeans, etc.) tool.
 
 ![alt JESB icon](https://github.com/dotxyteam/JVisualMapper/blob/main/j-visual-mapper/misc/screenshot.png?raw=true)
 
