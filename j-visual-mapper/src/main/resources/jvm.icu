@@ -593,6 +593,11 @@
             <transientForced>false</transientForced>
             <valueValidityDetectionForced>false</valueValidityDetectionForced>
         </fieldsCustomization>
+        <formWidth>
+            <uniqueIdentifier>-6ad99185:19b5c13b35a:-509d</uniqueIdentifier>
+            <unit>PIXELS</unit>
+            <value>700</value>
+        </formWidth>
         <immutableForced>false</immutableForced>
         <loadingMethodName>loadMappings</loadingMethodName>
         <menuModel>
@@ -1331,6 +1336,64 @@
             <runWhenObjectShown>false</runWhenObjectShown>
             <validating>false</validating>
         </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>-6ad99185:19b5c1393a6:-4c9c</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>saveMappings</methodName>
+            <methodSignature>void saveMappings(java.io.FileOutputStream)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>-6ad99185:19b5c1393a6:-4c93</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>-6ad99185:19b5c1393a6:-4c92</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>output</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>-6ad99185:19b5c1393a6:-4c9b</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>loadMappings</methodName>
+            <methodSignature>void loadMappings(java.io.InputStream)</methodSignature>
+            <parametersCustomization>
+                <uniqueIdentifier>-6ad99185:19b5c1393a6:-4c91</uniqueIdentifier>
+                <specificProperties/>
+                <defaultValue>
+                    <uniqueIdentifier>-6ad99185:19b5c1393a6:-4c90</uniqueIdentifier>
+                </defaultValue>
+                <displayedAsField>false</displayedAsField>
+                <hidden>false</hidden>
+                <nullValueDistinctForced>false</nullValueDistinctForced>
+                <parameterName>input</parameterName>
+                <valueContextual>false</valueContextual>
+            </parametersCustomization>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>false</validating>
+        </methodsCustomization>
         <polymorphicInstanceAbstractTypeOptionAllowed>false</polymorphicInstanceAbstractTypeOptionAllowed>
         <savingMethodName>saveMappings</savingMethodName>
         <typeName>com.otk.jvm.Mapper</typeName>
@@ -1856,11 +1919,6 @@
         </fieldsCustomization>
         <fieldsLayout>HORIZONTAL_FLOW</fieldsLayout>
         <formSpacing>0</formSpacing>
-        <formWidth>
-            <uniqueIdentifier>43a92071:19b5291b368:-5345</uniqueIdentifier>
-            <unit>PIXELS</unit>
-            <value>700</value>
-        </formWidth>
         <immutableForced>false</immutableForced>
         <menuModel>
             <uniqueIdentifier>622875a6:19b4d98c056:52e8</uniqueIdentifier>

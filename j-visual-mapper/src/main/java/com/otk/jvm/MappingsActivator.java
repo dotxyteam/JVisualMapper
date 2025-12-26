@@ -4,6 +4,12 @@ import com.otk.jesb.activation.ActivationHandler;
 import com.otk.jesb.activation.Activator;
 import com.otk.jesb.solution.Solution;
 
+/**
+ * Stores a mapper input and output classes.
+ * 
+ * @author olitank
+ *
+ */
 public class MappingsActivator extends Activator {
 
 	protected Class<?> sourceClass;
