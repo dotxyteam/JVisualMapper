@@ -8,7 +8,7 @@
 	<version>0.9.0</version>
 	<packaging>jar</packaging>
 
-	<name>JVisualMapper</name>
+	<name>J-Visual Mapper</name>
 	<description>Java graphical mapping tool</description>
 	<url>https://github.com/dotxyteam/JVisualMapper</url>
 	<licenses>
