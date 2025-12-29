@@ -1,12 +1,14 @@
 package com.otk.jvm.util;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import com.otk.jesb.solution.Plan.ExecutionError;
 import com.otk.jvm.Mapper;
@@ -21,91 +23,139 @@ import com.otk.jvm.annotation.MappingsResource;
  */
 public class Mappers {
 
+	public static final BiFunction<Class<?>, Method, Function<Object[], Object>> MAP_STRUCT_HANDLER = (mapperInterface,
+			method) -> {
+		try {
+			return createMapStructHandler(mapperInterface, method);
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException
+				| InvocationTargetException e) {
+			throw new MappingErroprWrapper(e);
+		}
+	};
+
 	/**
 	 * @param <M>             The mapper interface.
 	 * @param mapperInterface The interface containing the mappings methods.
+	 * @return A proxy implementing the provided interface using {@link Mapper}
+	 *         instances (specified via the {@link MappingsResource} annotation).
+	 *         Note that if this annotation is not specified on a method but valid
+	 *         MapStruct (https://mapstruct.org/) annotations are found, then the
+	 *         MapStruct implementation will be used. This fallback strategy can be
+	 *         modified by using {@link #getMapper(Class, BiFunction)}.
+	 */
+	public static <M> M getMapper(Class<M> mapperInterface) {
+		return getMapper(mapperInterface, MAP_STRUCT_HANDLER);
+	}
+
+	/**
+	 * @param <M>                   The mapper interface.
+	 * @param mapperInterface       The interface containing the mappings methods.
+	 * @param defaultHandlerFactory The function that will be used to create a
+	 *                              default mapper.
 	 * @return A proxy implementing the provided interface using {@link Mapper}
 	 *         instances (specified via the {@link MappingsResource} annotation), or
 	 *         using by default the MapStruct (https://mapstruct.org/)
 	 *         implementation.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <M> M getMapper(Class<M> mapperInterface) {
+	public static <M> M getMapper(Class<M> mapperInterface,
+			BiFunction<Class<?>, Method, Function<Object[], Object>> defaultHandlerFactory) {
 		if (!mapperInterface.isInterface()) {
 			throw new IllegalStateException("'" + mapperInterface + "' is not an interface");
 
 		}
 		return (M) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface },
-				getInvocationHandler(mapperInterface));
+				getInvocationHandler(mapperInterface, defaultHandlerFactory));
 	}
 
-	private static InvocationHandler getInvocationHandler(Class<?> mapperInterface) {
+	private static InvocationHandler getInvocationHandler(Class<?> mapperInterface,
+			BiFunction<Class<?>, Method, Function<Object[], Object>> defaultHandlerFactory) {
 		return new InvocationHandler() {
 
 			Map<Method, Function<Object[], Object>> internalHandlerCache = new HashMap<Method, Function<Object[], Object>>();
 
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				Function<Object[], Object> internalHandler = internalHandlerCache.get(method);
-				if (internalHandler == null) {
-					internalHandler = createInternalHandler(method);
-					internalHandlerCache.put(method, internalHandler);
+				Function<Object[], Object> mappingsHandler = internalHandlerCache.get(method);
+				if (mappingsHandler == null) {
+					mappingsHandler = createHandler(mapperInterface, method, defaultHandlerFactory);
+					internalHandlerCache.put(method, mappingsHandler);
 				}
 				try {
-					return internalHandler.apply(args);
+					return mappingsHandler.apply(args);
 				} catch (MappingErroprWrapper e) {
 					throw e.getCause();
 				}
 			}
 
-			Function<Object[], Object> createInternalHandler(Method method) throws IOException {
-				MappingsResource resourceAnnotation = method.getAnnotation(MappingsResource.class);
-				if (resourceAnnotation == null) {
-					if (mapperInterface.getAnnotation(org.mapstruct.Mapper.class) != null) {
-						return new Function<Object[], Object>() {
+		};
+	}
 
-							Object mapper = org.mapstruct.factory.Mappers.getMapper(mapperInterface);
+	private static Function<Object[], Object> createHandler(Class<?> mapperInterface, Method method,
+			BiFunction<Class<?>, Method, Function<Object[], Object>> defaultHandlerFactory) throws Exception {
+		if (method.getAnnotation(MappingsResource.class) != null) {
+			return createStandardHandler(mapperInterface, method);
+		}
+		if (defaultHandlerFactory == null) {
+			throw new IllegalStateException("Cannot implement mapping method: '" + method + "': no handler found");
+		}
+		return defaultHandlerFactory.apply(mapperInterface, method);
+	}
 
-							@Override
-							public Object apply(Object[] args) {
-								try {
-									return method.invoke(mapper, args);
-								} catch (IllegalAccessException | IllegalArgumentException
-										| InvocationTargetException e) {
-									throw new MappingErroprWrapper(e);
-								}
-							}
-						};
-					}
-					throw new IllegalStateException(
-							"'" + MappingsResource.class.getName() + "' annotation not found on '" + method + "'");
+	private static Function<Object[], Object> createStandardHandler(Class<?> mapperInterface, Method method)
+			throws IOException {
+		MappingsResource resourceAnnotation = method.getAnnotation(MappingsResource.class);
+		if (resourceAnnotation == null) {
+			throw new IllegalStateException("Invalid mapping method: '" + method + "': '"
+					+ MappingsResource.class.getName() + "' annotation not found");
+		}
+		if (method.getParameterCount() != 1) {
+			throw new IllegalStateException("Invalid mapping method: '" + method
+					+ "': Unexpected number of parameters: " + method.getParameterCount() + ": Expected: 1 parameter");
+		}
+		Class<?> sourceClass = method.getParameterTypes()[0];
+		if (method.getReturnType() == void.class) {
+			throw new IllegalStateException("Invalid mapping method: '" + method + "': Unexpected 'void' return type");
+		}
+		Class<?> targetClass = method.getReturnType();
+		return new Function<Object[], Object>() {
+
+			Mapper mapper = Mapper.get(sourceClass, targetClass, mapperInterface, resourceAnnotation.location());
+
+			@Override
+			public Object apply(Object[] args) {
+				try {
+					return mapper.map(args[0]);
+				} catch (ExecutionError e) {
+					throw new MappingErroprWrapper(e);
 				}
-				if (method.getParameterCount() != 1) {
-					throw new IllegalStateException(
-							"Invalid mapping method: '" + method + "': Unexpected number of parameters: "
-									+ method.getParameterCount() + ": Expected: 1 parameter");
+			}
+		};
+	}
+
+	private static Function<Object[], Object> createMapStructHandler(Class<?> mapperInterface, Method method)
+			throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException,
+			InvocationTargetException {
+		@SuppressWarnings("unchecked")
+		Class<? extends Annotation> mapperAnnotationClass = (Class<? extends Annotation>) Class
+				.forName("org.mapstruct.Mapper");
+		if (mapperInterface.getAnnotation(mapperAnnotationClass) == null) {
+			throw new IllegalStateException(
+					"'" + mapperAnnotationClass.getName() + "' annotation not found on '" + method + "'");
+		}
+		Class<?> mappersFactoryClass = Class.forName("org.mapstruct.factory.Mappers");
+		Method mappersFactoryMethod = mappersFactoryClass.getMethod("getMapper", Class.class);
+		return new Function<Object[], Object>() {
+
+			Object mapper = mappersFactoryMethod.invoke(null, mapperInterface);
+
+			@Override
+			public Object apply(Object[] args) {
+				try {
+					return method.invoke(mapper, args);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					throw new MappingErroprWrapper(e);
 				}
-				Class<?> sourceClass = method.getParameterTypes()[0];
-				if (method.getReturnType() == void.class) {
-					throw new IllegalStateException(
-							"Invalid mapping method: '" + method + "': Unexpected 'void' return type");
-				}
-				Class<?> targetClass = method.getReturnType();
-				return new Function<Object[], Object>() {
-
-					Mapper mapper = Mapper.get(sourceClass, targetClass, mapperInterface,
-							resourceAnnotation.location());
-
-					@Override
-					public Object apply(Object[] args) {
-						try {
-							return mapper.map(args[0]);
-						} catch (ExecutionError e) {
-							throw new MappingErroprWrapper(e);
-						}
-					}
-				};
-
 			}
 		};
 	}

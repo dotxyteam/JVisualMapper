@@ -1,0 +1,141 @@
+<com.otk.jesb.instantiation.RootInstanceBuilder>
+  <dynamicTypeNameAccessor class="com.otk.jesb.instantiation.RootInstanceBuilder$RootInstanceWrapperDynamicTypeNameAccessor">
+    <outer-class reference="../.."/>
+  </dynamicTypeNameAccessor>
+  <fieldInitializers/>
+  <initializationSwitches/>
+  <listItemInitializers/>
+  <parameterInitializers>
+    <com.otk.jesb.instantiation.ParameterInitializer>
+      <parameterPosition>0</parameterPosition>
+      <parameterValue class="com.otk.jesb.instantiation.InstanceBuilder">
+        <dynamicTypeNameAccessor class="null"/>
+        <fieldInitializers>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>fish</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+              <dynamicTypeNameAccessor class="null"/>
+              <fieldInitializers/>
+              <initializationSwitches/>
+              <listItemInitializers/>
+              <parameterInitializers/>
+              <selectedConstructorSignature class="null"/>
+              <typeName>org.mapstruct.example.dto.FishDto</typeName>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>material</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+              <dynamicTypeNameAccessor class="null"/>
+              <fieldInitializers/>
+              <initializationSwitches/>
+              <listItemInitializers/>
+              <parameterInitializers/>
+              <selectedConstructorSignature class="null"/>
+              <typeName>org.mapstruct.example.dto.MaterialDto</typeName>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>name</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstantiationFunction">
+              <functionBody>return SOURCE.getName();</functionBody>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>plant</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+              <dynamicTypeNameAccessor class="null"/>
+              <fieldInitializers>
+                <com.otk.jesb.instantiation.FieldInitializer>
+                  <condition class="null"/>
+                  <fieldName>kind</fieldName>
+                  <fieldValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return (SOURCE.getPlant()==null) ? null : SOURCE.getPlant().getKind();</functionBody>
+                  </fieldValue>
+                </com.otk.jesb.instantiation.FieldInitializer>
+              </fieldInitializers>
+              <initializationSwitches/>
+              <listItemInitializers/>
+              <parameterInitializers/>
+              <selectedConstructorSignature class="null"/>
+              <typeName>org.mapstruct.example.dto.WaterPlantDto</typeName>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>quality</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+              <dynamicTypeNameAccessor class="null"/>
+              <fieldInitializers>
+                <com.otk.jesb.instantiation.FieldInitializer>
+                  <condition class="null"/>
+                  <fieldName>report</fieldName>
+                  <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+                    <dynamicTypeNameAccessor class="null"/>
+                    <fieldInitializers>
+                      <com.otk.jesb.instantiation.FieldInitializer>
+                        <condition class="null"/>
+                        <fieldName>verdict</fieldName>
+                        <fieldValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                          <functionBody>if(SOURCE.getQuality() == null){
+    return null;
+}
+if(SOURCE.getQuality().getReport() == null){
+    return null;
+}
+return SOURCE.getQuality().getReport().getVerdict();</functionBody>
+                        </fieldValue>
+                      </com.otk.jesb.instantiation.FieldInitializer>
+                    </fieldInitializers>
+                    <initializationSwitches/>
+                    <listItemInitializers/>
+                    <parameterInitializers/>
+                    <selectedConstructorSignature class="null"/>
+                    <typeName>org.mapstruct.example.dto.WaterQualityReportDto</typeName>
+                  </fieldValue>
+                </com.otk.jesb.instantiation.FieldInitializer>
+              </fieldInitializers>
+              <initializationSwitches/>
+              <listItemInitializers/>
+              <parameterInitializers/>
+              <selectedConstructorSignature class="null"/>
+              <typeName>org.mapstruct.example.dto.WaterQualityDto</typeName>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+        </fieldInitializers>
+        <initializationSwitches/>
+        <listItemInitializers/>
+        <parameterInitializers/>
+        <selectedConstructorSignature class="null"/>
+        <typeName>com.otk.jesb.instantiation.RootInstanceBuilder.ROOT_INSTANCE_TYPE_NAME_REFERENCE</typeName>
+      </parameterValue>
+    </com.otk.jesb.instantiation.ParameterInitializer>
+  </parameterInitializers>
+  <rootInstanceDynamicTypeNameAccessor class="com.otk.jesb.solution.Plan$OutputClassNameAccessor">
+    <outer-class class="com.otk.jvm.Mapper">
+      <name>Mapper0175336439596345826309115608168060298404</name>
+      <inputVariableName>SOURCE</inputVariableName>
+      <activator class="com.otk.jvm.MappingsActivator">
+        <enabledVariant>
+          <constantValue class="boolean">true</constantValue>
+          <valueClass>java.lang.Boolean</valueClass>
+          <variable>false</variable>
+          <variableReferenceExpression class="null"/>
+        </enabledVariant>
+        <sourceClass>org.mapstruct.example.model.FishTank</sourceClass>
+        <targetClass>org.mapstruct.example.dto.FishTankDto</targetClass>
+      </activator>
+      <steps/>
+      <transitions/>
+      <outputBuilder reference="../../.."/>
+    </outer-class>
+  </rootInstanceDynamicTypeNameAccessor>
+  <rootInstanceName>TARGET</rootInstanceName>
+  <rootInstanceTypeName class="null"/>
+  <selectedConstructorSignature class="null"/>
+  <typeName>&lt;Dynamic&gt;</typeName>
+</com.otk.jesb.instantiation.RootInstanceBuilder>
