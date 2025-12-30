@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="process" name="mapstruct-processor">
+
+	<target name="process">
+		<javac debug="true" verbose="true" srcdir="../../src/test/java" destdir="../../target/classes">
+			<compilerarg line="-processorpath mapstruct-processor-1.6.3.jar" />
+			<compilerarg line="-s ../../target/generated-sources" />
+			<classpath>
+				<filelist>
+					<file name="mapstruct-1.6.3.jar" />
+					<file name="mapstruct-processor-1.6.3.jar" />
+				</filelist>
+			</classpath>
+			<include name="**/org/mapstruct/example/**" />
+		</javac>
+	</target>
+
+</project>
