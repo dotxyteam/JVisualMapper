@@ -76,8 +76,8 @@ public class Mapper extends Plan {
 	 */
 	public static Mapper get(Class<?> sourceClass, Class<?> targetClass, Class<?> resourceClass,
 			String resourceLocation) throws IOException {
-		URL resourceURL = resourceClass.getResource(resourceLocation);
 		Mapper result = new Mapper(sourceClass, targetClass);
+		URL resourceURL = resourceClass.getResource(resourceLocation);
 		if (resourceURL != null) {
 			try (InputStream input = resourceURL.openStream()) {
 				result.loadMappings(input);

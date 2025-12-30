@@ -1,7 +1,6 @@
 package com.otk.jvm.util;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
 import com.otk.jesb.solution.Plan.ExecutionError;
 import com.otk.jvm.Mapper;
 import com.otk.jvm.annotation.MappingsResource;
@@ -23,29 +23,15 @@ import com.otk.jvm.annotation.MappingsResource;
  */
 public class Mappers {
 
-	public static final BiFunction<Class<?>, Method, Function<Object[], Object>> MAP_STRUCT_HANDLER = (mapperInterface,
-			method) -> {
+	public static final BiFunction<Class<?>, Method, Function<Object[], Object>> MAP_STRUCT_FALLBACK_HANDLER = (
+			mapperInterface, method) -> {
 		try {
 			return createMapStructHandler(mapperInterface, method);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException
 				| InvocationTargetException e) {
-			throw new MappingErroprWrapper(e);
+			throw new RuntimeException(e);
 		}
 	};
-
-	/**
-	 * @param <M>             The mapper interface.
-	 * @param mapperInterface The interface containing the mappings methods.
-	 * @return A proxy implementing the provided interface using {@link Mapper}
-	 *         instances (specified via the {@link MappingsResource} annotation).
-	 *         Note that if this annotation is not specified on a method but valid
-	 *         MapStruct (https://mapstruct.org/) annotations are found, then the
-	 *         MapStruct implementation will be used. This fallback strategy can be
-	 *         modified by using {@link #getMapper(Class, BiFunction)}.
-	 */
-	public static <M> M getMapper(Class<M> mapperInterface) {
-		return getMapper(mapperInterface, MAP_STRUCT_HANDLER);
-	}
 
 	/**
 	 * @param <M>                   The mapper interface.
@@ -97,9 +83,15 @@ public class Mappers {
 			return createStandardHandler(mapperInterface, method);
 		}
 		if (defaultHandlerFactory == null) {
-			throw new IllegalStateException("Cannot implement mapping method: '" + method + "': no handler found");
+			throw new IllegalStateException(
+					"Cannot implement mapping method: '" + method + "': no fallback mappings handler factory found");
 		}
-		return defaultHandlerFactory.apply(mapperInterface, method);
+		try {
+			return defaultHandlerFactory.apply(mapperInterface, method);
+		} catch (RuntimeException e) {
+			throw new IllegalStateException(
+					"Cannot implement mapping method: '" + method + "': fallback mappings handler creation failed", e);
+		}
 	}
 
 	private static Function<Object[], Object> createStandardHandler(Class<?> mapperInterface, Method method)
@@ -136,13 +128,6 @@ public class Mappers {
 	private static Function<Object[], Object> createMapStructHandler(Class<?> mapperInterface, Method method)
 			throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException,
 			InvocationTargetException {
-		@SuppressWarnings("unchecked")
-		Class<? extends Annotation> mapperAnnotationClass = (Class<? extends Annotation>) Class
-				.forName("org.mapstruct.Mapper");
-		if (mapperInterface.getAnnotation(mapperAnnotationClass) == null) {
-			throw new IllegalStateException(
-					"'" + mapperAnnotationClass.getName() + "' annotation not found on '" + method + "'");
-		}
 		Class<?> mappersFactoryClass = Class.forName("org.mapstruct.factory.Mappers");
 		Method mappersFactoryMethod = mappersFactoryClass.getMethod("getMapper", Class.class);
 		return new Function<Object[], Object>() {
@@ -153,8 +138,10 @@ public class Mappers {
 			public Object apply(Object[] args) {
 				try {
 					return method.invoke(mapper, args);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				} catch (IllegalAccessException | IllegalArgumentException e) {
 					throw new MappingErroprWrapper(e);
+				} catch (InvocationTargetException e) {
+					throw new MappingErroprWrapper(e.getTargetException());
 				}
 			}
 		};

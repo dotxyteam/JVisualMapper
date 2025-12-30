@@ -160,6 +160,7 @@ public class MapperGUI extends GUI {
 											if (source == null) {
 												return;
 											}
+											openObjectDialog(mapperForm, source);
 											Object target;
 											try {
 												target = mapper.map(source);
