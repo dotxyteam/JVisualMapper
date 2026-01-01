@@ -68,7 +68,7 @@ mapper.loadMappings(mappingsFile);
 ```
 ```java
 // Conveniently declare a constant Mapper associated with a resource (if the
-// resource is found then the graphical editor will be automatically open and
+// resource is not found then the graphical editor will be automatically open and
 // the mappings modifications will be testable in realtime and persistable):
 public static final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class, MappingsExample.class,
 		"mappings.xml");
