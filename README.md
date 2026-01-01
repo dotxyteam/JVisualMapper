@@ -53,17 +53,20 @@ SwingUtilities.invokeLater(new Runnable() {
 		UI.INSTANCE.openObjectFrame(mapper);
 	}
 });
-
+```
+```java
 // Execute the mappings
 Rectangle source = new Rectangle();
 System.out.println(source);
 Polygon target = (Polygon) mapper.map(source);
-
+```
+```java
 // Save/Load the mappings to/from a file (or a stream):
 File mappingsFile = new File("tmp/mappings.xml");
 mapper.saveMappings(mappingsFile);
 mapper.loadMappings(mappingsFile);
-
+```
+```java
 // Conveniently declare a constant Mapper associated with a resource (if the
 // resource is found then the graphical editor will be automatically open and
 // the mappings modifications will be testable in realtime and persistable):
@@ -71,7 +74,8 @@ public static final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class
 		"mappings.xml");
 target = (Polygon) MY_MAPPER.map(source);
 System.out.println(target);
-
+```
+```java
 // Hide the implementation details of the mappings in an interface and (may be)
 // cohabit with other mappings frameworks (MapStruct, ...):
 public static MappingsExample INSTANCE = com.otk.jvm.util.Mappers.getMapper(MappingsExample.class,
