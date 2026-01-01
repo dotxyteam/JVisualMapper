@@ -45,7 +45,7 @@ It is distributed under this
 
 *   Snippets:
 ```java
-// Create a Mapper object and open it in the graphical editor:
+// Create a Mapper instance and open it in the graphical editor:
 Mapper mapper = new Mapper(Rectangle.class, Polygon.class);
 SwingUtilities.invokeLater(new Runnable() {
 	@Override
@@ -55,29 +55,29 @@ SwingUtilities.invokeLater(new Runnable() {
 });
 ```
 ```java
-// Execute the mappings
+// Execute the mappings:
 Rectangle source = new Rectangle();
 System.out.println(source);
 Polygon target = (Polygon) mapper.map(source);
 ```
 ```java
-// Save/Load the mappings to/from a file (or a stream):
+// Save/Load the mappings to/from a file (could be IO streams):
 File mappingsFile = new File("tmp/mappings.xml");
 mapper.saveMappings(mappingsFile);
 mapper.loadMappings(mappingsFile);
 ```
 ```java
-// Conveniently declare a constant Mapper associated with a resource (if the
-// resource is not found then the graphical editor will be automatically open and
-// the mappings modifications will be testable in realtime and persistable):
+// Conveniently declare a constant Mapper instance associated with a resource
+// (if the resource is not found then the graphical editor will open automatically
+// and the mappings modifications will be testable in realtime and storable):
 public static final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class, MappingsExample.class,
 		"mappings.xml");
 target = (Polygon) MY_MAPPER.map(source);
 System.out.println(target);
 ```
 ```java
-// Hide the implementation details of the mappings in an interface and (may be)
-// cohabit with other mappings frameworks (MapStruct, ...):
+// Hide the implementation details of the mappings in an interface and (optionally)
+// allow the solution to coexist with other mappings frameworks (MapStruct, etc.):
 public static MappingsExample INSTANCE = com.otk.jvm.util.Mappers.getMapper(MappingsExample.class,
 		com.otk.jvm.util.Mappers.MAP_STRUCT_FALLBACK_HANDLER);
 target = INSTANCE.map(source);
