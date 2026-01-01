@@ -45,14 +45,15 @@ It is distributed under this
 
 *   Snippets:
 ```java
-// Create a Mapper instance and open it in the graphical editor:
+// Create a Mapper instance, open it in the graphical editor, and then validate it:
 Mapper mapper = new Mapper(Rectangle.class, Polygon.class);
-SwingUtilities.invokeLater(new Runnable() {
+SwingUtilities.invokeAndWait(new Runnable() {
 	@Override
 	public void run() {
-		UI.INSTANCE.openObjectFrame(mapper);
+		UI.INSTANCE.openObjectDialog(null, mapper);
 	}
-});
+});		
+mapper.validate();
 ```
 ```java
 // Execute the mappings:
