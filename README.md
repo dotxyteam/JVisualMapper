@@ -81,6 +81,7 @@ System.out.println(target);
 // allow the solution to coexist with other mappings frameworks (MapStruct, etc.):
 public static MappingsExample INSTANCE = com.otk.jvm.util.Mappers.getMapper(MappingsExample.class,
 		com.otk.jvm.util.Mappers.MAP_STRUCT_FALLBACK_HANDLER);
+// Note that the mappings method must have the @MappingsResource(location = ...) annotation. 
 target = INSTANCE.map(source);
 System.out.println(target);
 ```
