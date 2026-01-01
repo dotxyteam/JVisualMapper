@@ -14,7 +14,6 @@ import com.otk.jesb.Session;
 import com.otk.jesb.instantiation.RootInstanceBuilder;
 import com.otk.jesb.solution.Plan;
 import com.otk.jesb.solution.Solution;
-import com.otk.jesb.util.MiscUtils;
 import com.otk.jvm.ui.MapperGUI;
 
 /**
@@ -149,7 +148,7 @@ public class Mapper extends Plan {
 	 * @throws IOException If an error occurs during the processing.
 	 */
 	public void saveMappings(FileOutputStream output) throws IOException {
-		MiscUtils.serialize(getOutputBuilder(), output, getSolutionInstance().getRuntime().getXstream());
+		getSolutionInstance().getSerializer().write(getOutputBuilder(), output);
 	}
 
 	/**
@@ -159,8 +158,7 @@ public class Mapper extends Plan {
 	 * @throws IOException If an error occurs during the processing.
 	 */
 	public void loadMappings(InputStream input) throws IOException {
-		setOutputBuilder(
-				(RootInstanceBuilder) MiscUtils.deserialize(input, getSolutionInstance().getRuntime().getXstream()));
+		setOutputBuilder((RootInstanceBuilder) getSolutionInstance().getSerializer().read(input));
 	}
 
 	/**
