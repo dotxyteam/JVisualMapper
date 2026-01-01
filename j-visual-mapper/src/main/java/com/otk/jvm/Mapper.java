@@ -11,6 +11,7 @@ import java.util.Arrays;
 import javax.swing.SwingUtilities;
 
 import com.otk.jesb.Session;
+import com.otk.jesb.ValidationError;
 import com.otk.jesb.instantiation.RootInstanceBuilder;
 import com.otk.jesb.solution.Plan;
 import com.otk.jesb.solution.Solution;
@@ -62,7 +63,8 @@ public class Mapper extends Plan {
 
 	/**
 	 * Creates a {@link Mapper} instance and loads the transformation specification
-	 * from the specified classpath-based resource.
+	 * from the specified classpath-based resource. If the resource is not found
+	 * then the mapper will be opened in a graphical editor.
 	 * 
 	 * @param sourceClass      The class of the transformation input object.
 	 * @param targetClass      The class of the transformation output object.
@@ -71,15 +73,19 @@ public class Mapper extends Plan {
 	 * @param resourceLocation The path to the resource (passed to
 	 *                         {@link Class#getResource(String)}).
 	 * @return The resulting {@link Mapper} instance.
-	 * @throws IOException If an error occurs during the processing.
+	 * @throws IOException           If an error occurs during the mappings resource
+	 *                               loading processing.
+	 * @throws IllegalStateException If an inconsistency is detected in the loaded
+	 *                               mappings data.
 	 */
 	public static Mapper get(Class<?> sourceClass, Class<?> targetClass, Class<?> resourceClass,
-			String resourceLocation) throws IOException {
+			String resourceLocation) throws IOException, IllegalStateException {
 		Mapper result = new Mapper(sourceClass, targetClass);
 		URL resourceURL = resourceClass.getResource(resourceLocation);
 		if (resourceURL != null) {
 			try (InputStream input = resourceURL.openStream()) {
 				result.loadMappings(input);
+				result.validate();
 			}
 		} else {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -92,15 +98,6 @@ public class Mapper extends Plan {
 			});
 		}
 		return result;
-	}
-
-	private static Solution getSolutionInstance() {
-		return UI.INSTANCE.getSolutionInstance();
-	}
-
-	@Override
-	public MappingsActivator getActivator() {
-		return (MappingsActivator) super.getActivator();
 	}
 
 	/**
@@ -142,6 +139,19 @@ public class Mapper extends Plan {
 	}
 
 	/**
+	 * Checks the consistency of the current mapper data.
+	 * 
+	 * @throws IllegalStateException If an inconsistency is detected.
+	 */
+	public void validate() throws IllegalStateException {
+		try {
+			validate(true, getSolutionInstance());
+		} catch (ValidationError e) {
+			throw new IllegalStateException(e.getMessage(), e.getCause());
+		}
+	}
+
+	/**
 	 * Saves the transformation specification in the specified stream.
 	 * 
 	 * @param output The output stream.
@@ -171,6 +181,15 @@ public class Mapper extends Plan {
 	public Object map(Object source) throws ExecutionError {
 		return execute(source, Plan.ExecutionInspector.DEFAULT,
 				new Plan.ExecutionContext(Session.openDummySession(getSolutionInstance()), this));
+	}
+
+	private static Solution getSolutionInstance() {
+		return UI.INSTANCE.getSolutionInstance();
+	}
+
+	@Override
+	public MappingsActivator getActivator() {
+		return (MappingsActivator) super.getActivator();
 	}
 
 	/**

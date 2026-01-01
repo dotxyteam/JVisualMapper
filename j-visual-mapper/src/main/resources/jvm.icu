@@ -1394,6 +1394,23 @@
             <runWhenObjectShown>false</runWhenObjectShown>
             <validating>false</validating>
         </methodsCustomization>
+        <methodsCustomization>
+            <uniqueIdentifier>-160bc0e9:19b7b545529:-4e1f</uniqueIdentifier>
+            <specificProperties/>
+            <hidden>true</hidden>
+            <detachedReturnValueForced>false</detachedReturnValueForced>
+            <duplicateGenerated>false</duplicateGenerated>
+            <ignoredReturnValueForced>false</ignoredReturnValueForced>
+            <lastInvocationDataUsageDisabled>false</lastInvocationDataUsageDisabled>
+            <methodName>validate</methodName>
+            <methodSignature>void validate()</methodSignature>
+            <readOnlyForced>false</readOnlyForced>
+            <returnValueFieldGenerated>false</returnValueFieldGenerated>
+            <returnValueValidityDetectionForced>false</returnValueValidityDetectionForced>
+            <runWhenObjectHidden>false</runWhenObjectHidden>
+            <runWhenObjectShown>false</runWhenObjectShown>
+            <validating>true</validating>
+        </methodsCustomization>
         <polymorphicInstanceAbstractTypeOptionAllowed>false</polymorphicInstanceAbstractTypeOptionAllowed>
         <savingMethodName>saveMappings</savingMethodName>
         <typeName>com.otk.jvm.Mapper</typeName>

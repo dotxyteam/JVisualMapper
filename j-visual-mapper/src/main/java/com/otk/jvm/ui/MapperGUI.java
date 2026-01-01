@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import com.otk.jesb.solution.Plan.ExecutionError;
 import com.otk.jesb.solution.Solution;
 import com.otk.jesb.ui.GUI;
 import com.otk.jvm.Mapper;
@@ -164,8 +163,8 @@ public class MapperGUI extends GUI {
 											Object target;
 											try {
 												target = mapper.map(source);
-											} catch (ExecutionError e) {
-												handleException(mapperForm, e);
+											} catch (Throwable t) {
+												handleException(mapperForm, t);
 												return;
 											}
 											if (target == null) {

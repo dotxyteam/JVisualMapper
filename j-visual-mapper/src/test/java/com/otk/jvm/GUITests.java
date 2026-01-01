@@ -1,8 +1,12 @@
 package com.otk.jvm;
 
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+
+import javax.swing.SwingUtilities;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -17,8 +21,10 @@ import org.mapstruct.example.model.Ornament;
 
 import com.otk.jesb.JESB;
 import com.otk.jesb.ui.GUI;
+import com.otk.jvm.Mapper.UI;
 import com.otk.jvm.annotation.MappingsResource;
 
+import xy.reflect.ui.control.swing.builder.StandardEditorBuilder;
 import xy.reflect.ui.control.swing.customizer.MultiSwingCustomizer.SubSwingCustomizer;
 import xy.reflect.ui.util.MiscUtils;
 import xy.ui.testing.Tester;
@@ -117,4 +123,53 @@ public class GUITests {
 
 	}
 
+	@Test
+	public void testExample() throws Exception {
+		Mapper mapper = new Mapper(Rectangle.class, Polygon.class);
+		StandardEditorBuilder[] editorBuilder = new StandardEditorBuilder[1];
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				editorBuilder[0] = UI.INSTANCE.openObjectFrame(mapper);
+			}
+		});
+		TestingUtils.assertSuccessfulReplay(tester, new File("test-specifications/testExample.stt"));
+
+		Rectangle source = new Rectangle(1, 2, 3, 4);
+		Polygon target = (Polygon) mapper.map(source);
+		if (!source.getBounds().equals(target.getBounds())) {
+			Assert.fail();
+		}
+
+		File mappingsFile = new File("tmp/tmp.mappings.xml");
+		mapper.saveMappings(mappingsFile);
+		mapper.loadMappings(mappingsFile);
+		if (!mappingsFile.delete()) {
+			Assert.fail();
+		}
+		Polygon target2 = (Polygon) mapper.map(source);
+		if (!source.getBounds().equals(target2.getBounds())) {
+			Assert.fail();
+		}
+
+		/* public static */ final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class, MappingsInterface.class,
+				"example.mappings.xml");
+		Polygon target3 = (Polygon) MY_MAPPER.map(source);
+		if (!source.getBounds().equals(target3.getBounds())) {
+			Assert.fail();
+		}
+
+		/* public static */ MappingsInterface INSTANCE = com.otk.jvm.util.Mappers.getMapper(MappingsInterface.class,
+				com.otk.jvm.util.Mappers.MAP_STRUCT_FALLBACK_HANDLER);
+		Polygon target4 = INSTANCE.map(source);
+		if (!source.getBounds().equals(target4.getBounds())) {
+			Assert.fail();
+		}
+	}
+
+	public interface MappingsInterface {
+
+		@MappingsResource(location = "example.mappings.xml")
+		Polygon map(Rectangle rectangle);
+	}
 }

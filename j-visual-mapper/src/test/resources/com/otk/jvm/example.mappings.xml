@@ -1,0 +1,143 @@
+<com.otk.jesb.instantiation.RootInstanceBuilder>
+  <dynamicTypeNameAccessor class="com.otk.jesb.instantiation.RootInstanceBuilder$RootInstanceWrapperDynamicTypeNameAccessor">
+    <outer-class reference="../.."/>
+  </dynamicTypeNameAccessor>
+  <fieldInitializers/>
+  <initializationSwitches/>
+  <listItemInitializers/>
+  <parameterInitializers>
+    <com.otk.jesb.instantiation.ParameterInitializer>
+      <parameterPosition>0</parameterPosition>
+      <parameterValue class="com.otk.jesb.instantiation.InstanceBuilder">
+        <dynamicTypeNameAccessor class="null"/>
+        <fieldInitializers>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>npoints</fieldName>
+            <fieldValue class="int">4</fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>xpoints</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+              <dynamicTypeNameAccessor class="null"/>
+              <fieldInitializers/>
+              <initializationSwitches/>
+              <listItemInitializers>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>0</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.x;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>1</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.x;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>2</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.x + SOURCE.width;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>3</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.x + SOURCE.width;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+              </listItemInitializers>
+              <parameterInitializers/>
+              <selectedConstructorSignature class="null"/>
+              <typeName>[I</typeName>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+          <com.otk.jesb.instantiation.FieldInitializer>
+            <condition class="null"/>
+            <fieldName>ypoints</fieldName>
+            <fieldValue class="com.otk.jesb.instantiation.InstanceBuilder">
+              <dynamicTypeNameAccessor class="null"/>
+              <fieldInitializers/>
+              <initializationSwitches/>
+              <listItemInitializers>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>0</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.y;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>1</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.y + SOURCE.height;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>2</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.y + SOURCE.height;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+                <com.otk.jesb.instantiation.ListItemInitializer>
+                  <condition class="null"/>
+                  <index>3</index>
+                  <itemReplication class="null"/>
+                  <itemValue class="com.otk.jesb.instantiation.InstantiationFunction">
+                    <functionBody>return SOURCE.y;</functionBody>
+                  </itemValue>
+                </com.otk.jesb.instantiation.ListItemInitializer>
+              </listItemInitializers>
+              <parameterInitializers/>
+              <selectedConstructorSignature class="null"/>
+              <typeName>[I</typeName>
+            </fieldValue>
+          </com.otk.jesb.instantiation.FieldInitializer>
+        </fieldInitializers>
+        <initializationSwitches/>
+        <listItemInitializers/>
+        <parameterInitializers/>
+        <selectedConstructorSignature class="null"/>
+        <typeName>com.otk.jesb.instantiation.RootInstanceBuilder.ROOT_INSTANCE_TYPE_NAME_REFERENCE</typeName>
+      </parameterValue>
+    </com.otk.jesb.instantiation.ParameterInitializer>
+  </parameterInitializers>
+  <rootInstanceDynamicTypeNameAccessor class="com.otk.jesb.solution.Plan$OutputClassNameAccessor">
+    <outer-class class="com.otk.jvm.Mapper">
+      <name>Mapper0254133209799743907988358392137506156764</name>
+      <inputVariableName>SOURCE</inputVariableName>
+      <activator class="com.otk.jvm.MappingsActivator">
+        <enabledVariant>
+          <constantValue class="boolean">true</constantValue>
+          <valueClass>java.lang.Boolean</valueClass>
+          <variable>false</variable>
+          <variableReferenceExpression class="null"/>
+        </enabledVariant>
+        <sourceClass>java.awt.Rectangle</sourceClass>
+        <targetClass>java.awt.Polygon</targetClass>
+      </activator>
+      <steps/>
+      <transitions/>
+      <outputBuilder reference="../../.."/>
+    </outer-class>
+  </rootInstanceDynamicTypeNameAccessor>
+  <rootInstanceName>TARGET</rootInstanceName>
+  <rootInstanceTypeName class="null"/>
+  <selectedConstructorSignature class="null"/>
+  <typeName>&lt;Dynamic&gt;</typeName>
+</com.otk.jesb.instantiation.RootInstanceBuilder>
