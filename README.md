@@ -15,13 +15,13 @@ The goal of this project is to provide a graphical alternative to tools (such as
 # Advantages
 
 - Graphical and XML-based
-- JIT (Just in time) mapping compilation
+- JIT (just in time) mapping compilation
 - Java-based expression editor (no specific language to learn)
-- Can coexist with other mapping frameworks (MapStruct, ...)
+- Can cohabit with other mapping frameworks (MapStruct, ...)
 
 # Compatibility
 
-Tested on Windows & Linux.
+Tested on Windows & Linux with Java 8 & 21.
 
 # Licensing
 
@@ -35,29 +35,51 @@ It is distributed under this
 # Getting started
 
 *   Add the dependency to your project (Maven dependency above):
-
+```xml
     <dependency>
     <groupId>com.github.dotxyteam</groupId>
     <artifactId>j-visual-mapper</artifactId>
     <version>LATEST</version>
     </dependency>
+```
 
-*   Create a Mapper object and open it in the graphical editor:
+*   Snippets:
+```java
+// Create a Mapper object and open it in the graphical editor:
+Mapper mapper = new Mapper(Rectangle.class, Polygon.class);
+SwingUtilities.invokeLater(new Runnable() {
+	@Override
+	public void run() {
+		UI.INSTANCE.openObjectFrame(mapper);
+	}
+});
 
-    Mapper mapper = new Mapper(sourceClass, targetClass);
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				UI.INSTANCE.openObjectFrame(mapper);
-			}
-		});
+// Execute the mappings
+Rectangle source = new Rectangle();
+System.out.println(source);
+Polygon target = (Polygon) mapper.map(source);
 
+// Save/Load the mappings to/from a file (or a stream):
+File mappingsFile = new File("tmp/mappings.xml");
+mapper.saveMappings(mappingsFile);
+mapper.loadMappings(mappingsFile);
 
+// Conveniently declare a constant Mapper associated with a resource (if the
+// resource is found then the graphical editor will be automatically open and
+// the mappings modifications will be testable in realtime and persistable):
+public static final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class, MappingsExample.class,
+		"mappings.xml");
+target = (Polygon) MY_MAPPER.map(source);
+System.out.println(target);
 
-# Documentation
-
-Explore the [Wiki](https://github.com/dotxyteam/JEnterpriseServiceBus/wiki) to learn more.
+// Hide the implementation details of the mappings in an interface and (may be)
+// cohabit with other mappings frameworks (MapStruct, ...):
+public static MappingsExample INSTANCE = com.otk.jvm.util.Mappers.getMapper(MappingsExample.class,
+		com.otk.jvm.util.Mappers.MAP_STRUCT_FALLBACK_HANDLER);
+target = INSTANCE.map(source);
+System.out.println(target);
+```
 
 # Support
 
-The support page is hosted [here on GitHub](https://github.com/dotxyteam/JEnterpriseServiceBus/issues). You can also contact us by email: [dotxyteam@yahoo.fr](mailto:dotxyteam@yahoo.fr).
+The support page is hosted [here on GitHub](https://github.com/dotxyteam/JVisualMapper/issues). You can also contact us by email: [dotxyteam@yahoo.fr](mailto:dotxyteam@yahoo.fr).
