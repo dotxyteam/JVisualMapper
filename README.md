@@ -50,7 +50,7 @@ Mapper mapper = new Mapper(Rectangle.class, Polygon.class);
 SwingUtilities.invokeAndWait(new Runnable() {
 	@Override
 	public void run() {
-		UI.INSTANCE.openObjectDialog(null, mapper);
+		UI.INSTANCE.openMappingsEditor(mapper, null, null, true);
 	}
 });		
 mapper.validate();
