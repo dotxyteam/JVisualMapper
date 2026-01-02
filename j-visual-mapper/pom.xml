@@ -137,6 +137,78 @@
 
 	<profiles>
 		<profile>
+			<id>dist</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.10</version>
+						<executions>
+							<execution>
+								<id>copy-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeScope>runtime</includeScope>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>create-dist-archive</id>
+								<phase>install</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<property name="dist.dir.name"
+											value="${project.artifactId}-${project.version}-dist" />
+										<mkdir dir="${basedir}/target/${dist.dir.name}" />
+										<mkdir dir="${basedir}/target/${dist.dir.name}/bin" />
+										<copy todir="${basedir}/target/${dist.dir.name}/bin">
+											<fileset dir="${basedir}/target">
+												<include
+													name="${project.artifactId}-${project.version}.jar" />
+											</fileset>
+											<fileset dir="${basedir}/target/dependency">
+												<include name="*.jar" />
+											</fileset>
+										</copy><mkdir dir="${basedir}/target/${dist.dir.name}/sources" />
+										<copy
+											todir="${basedir}/target/${dist.dir.name}/sources">
+											<fileset dir="${basedir}">
+												<include name="*.xml" />
+												<include name="*.txt" />
+												<include name="src/**" />
+												<include name="unpackaged-src/**" />												
+												<include name="LICENSE" />
+												<include name="misc/*.icu" />
+												<include name="test-specifications/**" />
+											</fileset>
+										</copy>
+										<zip destfile="${basedir}/target/${dist.dir.name}.zip">
+											<fileset dir="${basedir}/target">
+												<include name="${dist.dir.name}/**" />
+											</fileset>
+										</zip>
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>sonatype</id>
 			<build>
 				<plugins>
