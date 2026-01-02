@@ -1,23 +1,26 @@
 package com.otk.jvm.ui;
 
+import java.awt.Window;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-import javax.swing.SwingUtilities;
-
+import com.otk.jesb.solution.Plan.ExecutionError;
 import com.otk.jesb.solution.Solution;
 import com.otk.jesb.ui.GUI;
 import com.otk.jvm.Mapper;
 
 import xy.reflect.ui.control.RenderingContext;
 import xy.reflect.ui.control.swing.builder.AbstractEditorBuilder.EditorFrame;
+import xy.reflect.ui.control.swing.builder.DialogBuilder.RenderedDialog;
 import xy.reflect.ui.control.swing.builder.StandardEditorBuilder;
 import xy.reflect.ui.control.swing.menu.AbstractFileMenuItem;
 import xy.reflect.ui.control.swing.renderer.Form;
 import xy.reflect.ui.control.swing.util.SwingRendererUtils;
 import xy.reflect.ui.info.ResourcePath;
 import xy.reflect.ui.info.app.IApplicationInfo;
+import xy.reflect.ui.info.field.IFieldInfo;
 import xy.reflect.ui.info.method.IMethodInfo;
 import xy.reflect.ui.info.method.InvocationData;
 import xy.reflect.ui.info.method.MethodInfoProxy;
@@ -94,104 +97,152 @@ public class MapperGUI extends GUI {
 		return super.getMainCustomizedClass(customizationsIdentifier);
 	}
 
-	public void openMappingsEditor(Mapper result, String filePath, String title) {
+	public void openMappingsEditor(Mapper mapper, String filePath, String title, boolean modal) {
 		title = "J-Visual Mapper" + ((title == null) ? "" : (" - " + title));
-		StandardEditorBuilder editorBuilder = createEditorBuilder(null, result, title, null, true);
-		EditorFrame frame = editorBuilder.createFrame();
-		Form mapperForm = SwingRendererUtils.findFirstObjectDescendantForm(result, frame, this);
-		AbstractFileMenuItem.getLastFileByForm().put(mapperForm, new File(filePath));
-		SwingRendererUtils.updateAncestorWindowMenu(mapperForm, this);
-		showFrame(frame);
+		StandardEditorBuilder editorBuilder = createEditorBuilder(null, mapper, title, null, true);
+		Consumer<Window> filePathConfigurator = window -> {
+			if (filePath != null) {
+				Form mapperForm = SwingRendererUtils.findFirstObjectDescendantForm(mapper, window, this);
+				AbstractFileMenuItem.getLastFileByForm().put(mapperForm, new File(filePath));
+				SwingRendererUtils.updateAncestorWindowMenu(mapperForm, this);
+			}
+		};
+		if (modal) {
+			RenderedDialog dialog = editorBuilder.createDialog();
+			filePathConfigurator.accept(dialog);
+			showDialog(dialog, true);
+		} else {
+			EditorFrame frame = editorBuilder.createFrame();
+			filePathConfigurator.accept(frame);
+			showFrame(frame);
+		}
 	}
 
 	@Override
 	protected JESBSubCustomizedUI createSubCustomizedUI(String switchIdentifier) {
-		return new JESBSubCustomizedUI(switchIdentifier) {
+		return new MapperSubCustomizedUI(switchIdentifier);
+	}
+
+	public static class MappingsTester {
+
+		private Mapper mapper;
+		private Object source;
+
+		public MappingsTester(Mapper mapper) {
+			this.mapper = mapper;
+		}
+
+		public Mapper getMapper() {
+			return mapper;
+		}
+
+		public Object getSource() {
+			return source;
+		}
+
+		public void setSource(Object source) {
+			this.source = source;
+		}
+
+		public Object getTarget() throws ExecutionError {
+			return mapper.map(source);
+		}
+
+	}
+
+	protected class MapperSubCustomizedUI extends JESBSubCustomizedUI {
+
+		public MapperSubCustomizedUI(String switchIdentifier) {
+			super(switchIdentifier);
+		}
+
+		@Override
+		protected IInfoProxyFactory createAfterInfoCustomizationsFactory() {
+			return new InfoProxyFactory() {
+				@Override
+				protected ResourcePath getIconImagePath(IApplicationInfo appInfo) {
+					return null;
+				}
+			};
+		}
+
+		@Override
+		protected JESBBeforeInfoCustomizationsFactory createBeforeInfoCustomizationsFactory() {
+			return new MapperBeforeInfoCustomizationsFactory();
+		}
+
+		protected class MapperBeforeInfoCustomizationsFactory extends JESBBeforeInfoCustomizationsFactory {
 
 			@Override
-			protected IInfoProxyFactory createAfterInfoCustomizationsFactory() {
-				return new InfoProxyFactory() {
-					@Override
-					protected ResourcePath getIconImagePath(IApplicationInfo appInfo) {
-						return null;
-					}
-				};
-			}
+			protected List<IMethodInfo> getMethods(ITypeInfo type) {
+				if (type.getName().equals(Mapper.class.getName())) {
+					List<IMethodInfo> result = new ArrayList<IMethodInfo>(super.getMethods(type));
+					result.add(new MethodInfoProxy(IMethodInfo.NULL_METHOD_INFO) {
 
-			@Override
-			protected JESBBeforeInfoCustomizationsFactory createBeforeInfoCustomizationsFactory() {
-				return new JESBBeforeInfoCustomizationsFactory() {
-
-					@Override
-					protected List<IMethodInfo> getMethods(ITypeInfo type) {
-						if (type.getName().equals(Mapper.class.getName())) {
-							List<IMethodInfo> result = new ArrayList<IMethodInfo>(super.getMethods(type));
-							result.add(new MethodInfoProxy(IMethodInfo.NULL_METHOD_INFO) {
-
-								@Override
-								public String getSignature() {
-									return ReflectionUIUtils.buildMethodSignature(this);
-								}
-
-								@Override
-								public String getName() {
-									return "test";
-								}
-
-								@Override
-								public String getCaption() {
-									return ReflectionUIUtils.formatMethodCaption(this, getName(), 0);
-								}
-
-								@Override
-								public Object invoke(Object object, InvocationData invocationData) {
-									final Form mapperForm = SwingRendererUtils.findContextualFormOfType(
-											getReflectionUI().getTypeInfo(new JavaTypeInfoSource(Mapper.class, null)),
-											getReflectionUI().getRenderingContextThreadLocal().get());
-									SwingUtilities.invokeLater(new Runnable() {
-										@Override
-										public void run() {
-											Mapper mapper = (Mapper) mapperForm.getObject();
-											Object source = onTypeInstantiationRequest(mapperForm,
-													getReflectionUI().getTypeInfo(new JavaTypeInfoSource(
-															mapper.getActivator().getInputClass(getSolutionInstance()),
-															null)));
-											if (source == null) {
-												return;
-											}
-											openObjectDialog(mapperForm, source);
-											Object target;
-											try {
-												target = mapper.map(source);
-											} catch (Throwable t) {
-												handleException(mapperForm, t);
-												return;
-											}
-											if (target == null) {
-												handleException(mapperForm, new NullPointerException());
-												return;
-											}
-											openObjectDialog(mapperForm, target);
-										}
-									});
-									return null;
-								}
-
-								@Override
-								public boolean isReadOnly() {
-									return true;
-								}
-							});
-							return result;
-						} else {
-							return super.getMethods(type);
+						@Override
+						public String getSignature() {
+							return ReflectionUIUtils.buildMethodSignature(this);
 						}
-					}
 
-				};
+						@Override
+						public String getName() {
+							return "test";
+						}
+
+						@Override
+						public String getCaption() {
+							return ReflectionUIUtils.formatMethodCaption(this, getName(), 0);
+						}
+
+						@Override
+						public ITypeInfo getReturnValueType() {
+							return getReflectionUI().getTypeInfo(new JavaTypeInfoSource(MappingsTester.class, null));
+						}
+
+						@Override
+						public Object invoke(Object object, InvocationData invocationData) {
+							Mapper mapper = (Mapper) object;
+							return new MappingsTester(mapper);
+						}
+
+						@Override
+						public boolean isReadOnly() {
+							return true;
+						}
+					});
+					return result;
+				} else {
+					return super.getMethods(type);
+				}
 			}
 
-		};
+			@Override
+			protected List<IMethodInfo> getAlternativeConstructors(IFieldInfo field, Object object,
+					ITypeInfo objectType) {
+				if (objectType.getName().equals(MappingsTester.class.getName())) {
+					Mapper mapper = ((MappingsTester) object).getMapper();
+					if (field.getName().equals("source")) {
+						return getReflectionUI().getTypeInfo(new JavaTypeInfoSource(mapper.getSourceClass(), null))
+								.getConstructors();
+					}
+					if (field.getName().equals("target")) {
+						return getReflectionUI().getTypeInfo(new JavaTypeInfoSource(mapper.getTargetClass(), null))
+								.getConstructors();
+					}
+				}
+				return super.getAlternativeConstructors(field, object, objectType);
+			}
+
+			@Override
+			protected boolean isConcrete(ITypeInfo type) {
+				if (type.getName().equals(Object.class.getName())) {
+					return true;
+				}
+				return super.isConcrete(type);
+			}
+
+		}
+
 	}
 
 }

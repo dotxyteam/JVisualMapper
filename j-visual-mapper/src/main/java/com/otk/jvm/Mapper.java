@@ -93,7 +93,7 @@ public class Mapper extends Plan {
 				public void run() {
 					String resourceName = new File(resourceLocation).getName();
 					UI.INSTANCE.openMappingsEditor(result, resourceName,
-							resourceClass.getName() + "/" + resourceLocation);
+							resourceClass.getName() + "/" + resourceLocation, false);
 				}
 			});
 		}
@@ -101,17 +101,17 @@ public class Mapper extends Plan {
 	}
 
 	/**
-	 * @return The class name of the transformation input object.
+	 * @return The class of the transformation input object.
 	 */
-	public String getSourceClassName() {
-		return getActivator().getInputClass(getSolutionInstance()).getName();
+	public Class<?> getSourceClass() {
+		return getActivator().getInputClass(getSolutionInstance());
 	}
 
 	/**
-	 * @return The class name of the transformation output object.
+	 * @return The class of the transformation output object.
 	 */
-	public String getTargetClassName() {
-		return getActivator().getOutputClass(getSolutionInstance()).getName();
+	public Class<?> getTargetClass() {
+		return getActivator().getOutputClass(getSolutionInstance());
 	}
 
 	/**

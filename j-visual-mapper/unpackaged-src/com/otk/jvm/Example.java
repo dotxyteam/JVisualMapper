@@ -16,7 +16,7 @@ public interface Example {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
-				UI.INSTANCE.openObjectDialog(null, mapper);
+				UI.INSTANCE.openMappingsEditor(mapper, null, null, true);
 			}
 		});
 		mapper.validate();
@@ -29,8 +29,7 @@ public interface Example {
 		mapper.saveMappings(mappingsFile);
 		mapper.loadMappings(mappingsFile);
 
-		final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class, Example.class,
-				"mappings.xml");
+		final Mapper MY_MAPPER = Mapper.get(Rectangle.class, Polygon.class, Example.class, "mappings.xml");
 		target = (Polygon) MY_MAPPER.map(source);
 		System.out.println(target);
 
