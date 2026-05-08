@@ -14,7 +14,7 @@ The goal of this project is to provide a graphical alternative to tools (such as
 
 # Advantages
 
-- Graphical and XML-based
+- Graphical designer
 - JIT (just in time) mapping compilation
 - Java-based expression editor (no specific language to learn)
 - Can cohabit with other mapping frameworks (MapStruct, ...)
